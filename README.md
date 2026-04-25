@@ -71,3 +71,17 @@ XJ380-Wine（代号 XSWL）是一个基于 [Qiling 框架](https://github.com/qi
 ```bash
 git clone https://github.com/yaoyaomenke/XJ380-SubSystems-on-Windows-and-Linux-XSWL-.git
 cd XJ380-SubSystems-on-Windows-and-Linux-XSWL-
+```
+#### 2. 安装依赖
+```bash
+pip install -r requirements.txt
+```
+### 2.1:注意
+##linux用户还需要安装中文字体支持(没有的话可能会导致中文字体显示不正常):
+```bash
+sudo apt-get install fonts-wqy-microhei
+```
+#### 3.运行
+```bash
+python XJ380-wine.py <程序路径> [参数...]
+```
