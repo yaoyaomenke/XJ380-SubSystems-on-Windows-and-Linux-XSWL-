@@ -77,7 +77,7 @@ cd XJ380-SubSystems-on-Windows-and-Linux-XSWL-
 pip install -r requirements.txt
 ```
 ### 2.1:注意
-##linux用户还需要安装中文字体支持(没有的话可能会导致中文字体显示不正常):
+## linux用户还需要安装中文字体支持(没有的话可能会导致中文字体显示不正常):
 ```bash
 sudo apt-get install fonts-wqy-microhei
 ```
