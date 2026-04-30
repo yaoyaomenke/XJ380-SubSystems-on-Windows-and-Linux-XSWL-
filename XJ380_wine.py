@@ -282,6 +282,61 @@ def my_raw_syscall_handler(ql: Qiling):
             print(f"[xapi_SearchFile] 错误: {e}")
             ql.mem.write(count_ptr, struct.pack("I", 0))
 
+    elif syscall_num == 7389:  # xapi_Fork (真进程实现)
+        # UINT64 xapi_Fork(void)
+        import os as os_module
+
+        # 获取当前程序的路径
+        current_program = sys.argv[1]
+
+        # 获取调用 fork 时的 RIP 地址（返回地址的下一条指令）
+        fork_rip = ql.arch.regs.rip
+
+        # 收集当前程序的参数（不包括程序路径本身）
+        program_args = sys.argv[2:] if len(sys.argv) > 2 else []
+
+        # 获取 fork.py 的路径
+        fork_script = os_module.path.join(os_module.path.dirname(os_module.path.abspath(__file__)), "fork.py")
+
+        # 构建命令行参数
+        cmd = [
+                  sys.executable,  # Python 解释器路径
+                  fork_script,
+                  current_program,
+                  hex(fork_rip),  # 传入 fork 时的 RIP
+              ] + program_args
+
+        print(f"[xapi_Fork] 创建子进程")
+        print(f"  - 程序: {current_program}")
+        print(f"  - Fork RIP: 0x{fork_rip:x}")
+        print(f"  - 命令: {' '.join(cmd)}")
+
+        try:
+            # 启动子进程（不等待）
+            # 使用 Popen 在后台运行
+            child_process = subprocess.Popen(
+                cmd,
+                stdout=None,  # 继承父进程输出
+                stderr=None,  # 继承父进程错误输出
+                stdin=None,  # 不继承输入
+                creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os_module.name == 'nt' else 0
+            )
+
+            child_pid = child_process.pid
+            print(f"[xapi_Fork] 子进程创建成功，PID={child_pid}")
+
+            # 存储子进程信息以便后续管理（可选）
+            if not hasattr(ql, '_child_processes'):
+                ql._child_processes = {}
+            ql._child_processes[child_pid] = child_process
+
+            # 父进程返回子进程 PID
+            ql.arch.regs.rax = child_pid
+
+        except Exception as e:
+            print(f"[xapi_Fork] 创建子进程失败: {e}")
+            ql.arch.regs.rax = -1
+
     elif syscall_num == 7425:  # xapi_Makedir
         print("d")
         path_ptr = ql.arch.regs.rdi
