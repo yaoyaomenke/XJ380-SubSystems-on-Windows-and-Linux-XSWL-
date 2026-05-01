@@ -87,14 +87,4 @@ sudo yum install python3-tkinter  # CentOS/RHEL
 ```bash
 python XJ380-wine.py <程序路径> [参数...]
 ```
-## 📜 许可证
 
-本项目采用 **GNU General Public License v3.0** 
-
-这意味着：
-- ✅ 你可以自由使用、修改、分发
-- ✅ 修改后的代码也必须开源
-- ✅ 必须保留版权声明和许可证声明
-- ✅ 不允许闭源使用（包括商业用途）
-
-详见 [LICENSE](LICENSE) 文件
