@@ -83,6 +83,16 @@ sudo apt-get install fonts-wqy-microhei
 sudo apt-get install python3-tk  # Ubuntu/Debian
 sudo yum install python3-tkinter  # CentOS/RHEL
 ```
+#### 3.更换qiling库补丁
+## qiling库自身有一些bug,可能会导致兼容层无法启动,对此我们对文件进行了修改
+## 在启动之前请把repair文件夹下的"map_syscall.py"复制到"<python解释器路径>\Lib\site-packages\qiling\os\linux"文件夹中，并替换原有文件
+## 还要把repair文件夹下的"unistd.py"复制到"<python解释器路径>\Lib\site-packages\qiling\os\posix\syscall"文件夹中，并替换原有文件
+```bash
+cp ./repair/map_syscall.py <python-path>\Lib\site-packages\qiling\os\linux
+cp ./repair/unistd.py <python-path>\Lib\site-packages\qiling\os\posix\syscall
+```
+
+
 #### 3.运行
 ```bash
 python XJ380-wine.py <程序路径> [参数...]
